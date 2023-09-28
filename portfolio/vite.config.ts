@@ -18,6 +18,8 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			'@styles': path.resolve('./src/styles'),
+			'@models': path.resolve('./src/models'),
+			'@components': path.resolve('./src/components'),
 		}
 	}
 });

@@ -1,15 +1,19 @@
 <script lang="ts">
-	import { Canvas } from '@threlte/core';
-	import Scene from './Scene.svelte';
+	import { useProgress } from '@threlte/extras';
+	import { tweened } from 'svelte/motion';
+	import Loader from '../components/Loader.svelte';
+	import App from './App.svelte';
+
+	const { progress } = useProgress();
+	const tweenedProgress = tweened($progress, {
+		duration: 800
+	});
+	$: tweenedProgress.set($progress);
 </script>
 
+{#if $tweenedProgress < 1}
+  <Loader progress={$tweenedProgress} />
+{/if}
 
-<main class="mx-auto pt-[10svh] max-w-7xl px-6 pb-12">
-  <div class="relative h-[500vh] z-20">
-    <div class="fixed top-0 left-0 z-10 h-[100lvh] w-screen">
-      <Canvas>
-        <Scene />
-      </Canvas>
-    </div>
-  </div>
-</main>
+<App />
+

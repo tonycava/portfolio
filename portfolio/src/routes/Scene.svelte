@@ -1,47 +1,65 @@
 <script lang="ts">
-  import { T } from '@threlte/core';
-	import { useFrame, useLoader } from '@threlte/core';
+	import { T, useFrame, useLoader } from '@threlte/core';
 	import { interactivity } from '@threlte/extras';
 	import { spring } from 'svelte/motion';
 	import { onMount } from 'svelte';
-  import { DoubleSide, TextureLoader } from 'three';
+	import { DoubleSide, TextureLoader } from 'three';
+	import type { AnimationScript } from '../models';
+	import {
+		calculateScrollPercent,
+		getRandomParticlePos,
+		lerp,
+		playScrollAnimations,
+		scalePercent
+	} from '$lib';
+	import Background from '../components/Background.svelte';
 
 	interactivity();
 	const scale = spring(1);
-	const texture = useLoader(TextureLoader).load('/sp2.png');
-	const textureSvelte = useLoader(TextureLoader).load('/svelte.png');
+	const textureSvelte = useLoader(TextureLoader)
+		.load('/svelte.png');
 
-	let posX = -2;
-	let prevScrollY = 0;
+	const points = getRandomParticlePos(4002);
+	const animationScripts: AnimationScript[] = [];
 
-	const getRandomParticlePos = (numberOfParticles: number) => {
-		const positions = new Float32Array(numberOfParticles);
-		for (let i = 0; i < numberOfParticles; i++) {
-			positions[i] = (Math.random() - 0.5) * 10;
-		}
-		return positions;
-	};
-
-	let positions = getRandomParticlePos(4002);
-
-
-	function handleScroll() {
-		const currentScrollY = window.scrollY;
-
-		if (currentScrollY > prevScrollY) {
-			posX += 0.1;
-		} else if (currentScrollY < prevScrollY) {
-			posX -= 0.1;
-		}
-
-		prevScrollY = currentScrollY;
-	}
-
+	let scrollPercent = 0;
 	let mouseX = 0;
 	let mouseY = 0;
+	let posX = 0;
+	let rotation = 0;
+
+	animationScripts.push({
+		start: 0,
+		end: 20,
+		do: () => {
+			posX = lerp(
+				0, 10, scalePercent(scrollPercent, 0, 20)
+			);
+		},
+	});
+
+	animationScripts.push({
+		start: 0,
+		end: 101,
+		do: (delta) => {
+			for (let i = 0; i < points.length; i += 3) {
+				points[i + 1] -= delta * 0.1;
+
+				if (points[i + 1] < -2) {
+					points[i + 1] = (Math.random() - 0.5) * 10;
+				}
+			}
+
+			rotation += delta;
+		}
+	});
+
 
 	onMount(() => {
-		window.addEventListener('scroll', handleScroll);
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+		window.addEventListener('scroll', () => {
+			scrollPercent = calculateScrollPercent();
+		});
 
 		window.addEventListener('mousemove', (e) => {
 			mouseX = e.clientX;
@@ -49,28 +67,21 @@
 		});
 	});
 
-
-	let rotation = 0;
-
 	useFrame((state, delta) => {
-		for (let i = 0; i < positions.length - 3; i += 3) {
-			positions[i + 1] -= delta * 0.1;
-
-			if (positions[i + 1] < -2) {
-				positions[i + 1] = (Math.random() - 0.5) * 10;
-			}
-		}
-
-		rotation += delta;
+		playScrollAnimations(
+			animationScripts,
+			scrollPercent,
+			delta
+		);
 	});
 </script>
 
 <T.PerspectiveCamera
   makeDefault
-  position={[4, 4, 4]}
-  on:create={({ ref }) => {
-    ref.lookAt(0, 1, 0)
-  }}
+  fov={75}
+  aspect={window.innerWidth / window.innerHeight}
+  near={0.1}
+  far={1000}
 />
 
 <T.Mesh
@@ -92,25 +103,7 @@
   />
 </T.Mesh>
 
-<T.Points
-  position.x={mouseY * 0.0001}
-  position.y={mouseX * 0.0001}
->
-  <T.BufferGeometry>
-    <T.BufferAttribute
-      args={[positions, 3]}
-      attach={(parent, self) => {
-        parent.setAttribute('position', self)
-        return () => {
-          // cleanup function called when ref changes or the component unmounts
-          // https://threlte.xyz/docs/reference/core/t#attach
-        }
-      }}
-    />
-  </T.BufferGeometry>
-  <T.PointsMaterial
-    size={0.05}
-    transparent={true}
-    map={$texture}
-  />
-</T.Points>
+<Background
+  {points}
+  position={{x: mouseY * 0.0001, y: mouseX * 0.0001, z: 0}}
+/>

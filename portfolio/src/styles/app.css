@@ -3,8 +3,16 @@
 @tailwind utilities;
 
 @layer base {
+
+    :root {
+        --color-primary: wheat;
+        --color-text-primary: wheat;
+        --color-secondary: rgb(10, 15, 25);
+        --color-text-secondary: rgb(10, 15, 25);;
+    }
+
     html {
-        background-color: rgb(10, 15, 25)
+        background-color: var(--color-secondary);
     }
 
     body {
