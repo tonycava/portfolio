@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:
+  app:
+    container_name: portfolio
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    restart: always
+    environment:
+      PORT: ${PORT}
+    ports:
+      - '8090:3000'

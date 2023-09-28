@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html {
+        background-color: rgb(10, 15, 25)
+    }
+
+    body {
+        margin: 0;
+    }
+
+    canvas {
+        width: 100vw;
+        height: 100vh;
+    }
+}
