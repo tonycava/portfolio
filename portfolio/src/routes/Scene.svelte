@@ -25,16 +25,29 @@
 	let scrollPercent = 0;
 	let mouseX = 0;
 	let mouseY = 0;
-	let posX = 0;
+	let posX = 6;
+	let opacity = 1;
+	let posY = -5;
 	let rotation = 0;
 
 	animationScripts.push({
-		start: 0,
-		end: 20,
+		start: 20,
+		end: 40,
 		do: () => {
 			posX = lerp(
-				0, 10, scalePercent(scrollPercent, 0, 20)
+				6, -1, scalePercent(scrollPercent, 20, 40)
 			);
+			posY = lerp(
+				-5, 1, scalePercent(scrollPercent, 20, 40)
+			);
+
+			if (scrollPercent >= 35) {
+				opacity = +lerp(
+					1, 0, scalePercent(scrollPercent, 20, 40)
+				).toFixed(0);
+			} else {
+				opacity = 1;
+			}
 		},
 	});
 
@@ -82,11 +95,12 @@
   aspect={window.innerWidth / window.innerHeight}
   near={0.1}
   far={1000}
+  position.z={2}
 />
 
 <T.Mesh
   rotation.y={rotation}
-  position.y={0}
+  position.y={posY}
   position.x={posX}
   position.z={-3}
   scale={$scale}
@@ -97,6 +111,7 @@
 >
   <T.PlaneGeometry />
   <T.MeshBasicMaterial
+    {opacity}
     transparent={true}
     side={DoubleSide}
     map={$textureSvelte}

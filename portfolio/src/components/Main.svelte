@@ -1,6 +1,7 @@
 <script>
     import { Canvas } from '@threlte/core';
-    import Scene from './Scene.svelte';
+    import Scene from '../routes/Scene.svelte';
+    import Pulse from '@components/Pulse.svelte';
 </script>
 
 <main class="mx-auto pt-[10svh] max-w-7xl px-6 pb-12">
@@ -10,5 +11,6 @@
         <Scene />
       </Canvas>
     </div>
+<!--    <Pulse />-->
   </div>
 </main>

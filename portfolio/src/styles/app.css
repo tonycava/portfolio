@@ -1,8 +1,24 @@
+@import "font.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+
+    ::-webkit-scrollbar-thumb {
+        background: #2f7dc630;
+        border-radius: 10px;
+    }
+
+
+    ::-webkit-scrollbar-track {
+        border-radius: 8px;
+    }
+
+    ::-webkit-scrollbar {
+        width: 6px;
+    }
 
     :root {
         --color-primary: wheat;

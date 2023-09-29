@@ -2,7 +2,9 @@
 	import { useProgress } from '@threlte/extras';
 	import { tweened } from 'svelte/motion';
 	import Loader from '../components/Loader.svelte';
-	import App from './App.svelte';
+	import Header from '@components/Header.svelte';
+	import Main from '@components/Main.svelte';
+	import Footer from '@components/Footer.svelte';
 
 	const { progress } = useProgress();
 	const tweenedProgress = tweened($progress, {
@@ -15,5 +17,6 @@
   <Loader progress={$tweenedProgress} />
 {/if}
 
-<App />
-
+<Header />
+<Main />
+<!--<Footer />-->
