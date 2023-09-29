@@ -2,7 +2,7 @@
     import Svg from '@components/common/Svg.svelte';
 </script>
 
-<header class="fixed z-40 hidden h-[70px] w-screen flex-row items-center justify-between border-b border-blue-900/0 px-6 md:flex">
+<header class="fixed z-40 mt-4 h-[70px] sm:mt-0 w-screen flex-row items-center justify-between border-b border-blue-900/0 px-6 sm:flex">
   <a
     href="/"
     class="flex items-center justify-center gap-5"
@@ -11,7 +11,7 @@
     <span class="text-3xl font-poppins-bold text-primary">tonycava</span>
   </a>
 
-  <div class="flex items-center justify-center gap-5">
+  <div class="flex items-center justify-center gap-5 sm:mt-0 mt-4">
     <a
       href="https://github.com/tonycava/"
       class="z-50"
