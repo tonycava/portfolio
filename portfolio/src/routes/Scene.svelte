@@ -4,7 +4,6 @@
 	import { spring } from 'svelte/motion';
 	import { onMount } from 'svelte';
 	import { DoubleSide, TextureLoader } from 'three';
-	import type { AnimationScript } from '../models';
 	import {
 		calculateScrollPercent,
 		getRandomParticlePos,
@@ -13,6 +12,10 @@
 		scalePercent
 	} from '$lib';
 	import Background from '../components/Background.svelte';
+	import {
+		animationScripts
+	} from '@stores/animation.store';
+
 
 	interactivity();
 	const scale = spring(1);
@@ -20,7 +23,6 @@
 		.load('/svelte.png');
 
 	const points = getRandomParticlePos(4002);
-	const animationScripts: AnimationScript[] = [];
 
 	let scrollPercent = 0;
 	let mouseX = 0;
@@ -30,7 +32,7 @@
 	let posY = -5;
 	let rotation = 0;
 
-	animationScripts.push({
+$animationScripts.push({
 		start: 20,
 		end: 40,
 		do: () => {
@@ -40,39 +42,24 @@
 			posY = lerp(
 				-5, 1, scalePercent(scrollPercent, 20, 40)
 			);
-
-			if (scrollPercent >= 35) {
-				opacity = +lerp(
-					1, 0, scalePercent(scrollPercent, 20, 40)
-				).toFixed(0);
-			} else {
-				opacity = 1;
-			}
 		},
 	});
 
-	animationScripts.push({
-		start: 0,
-		end: 101,
-		do: (delta) => {
-			for (let i = 0; i < points.length; i += 3) {
-				points[i + 1] -= delta * 0.1;
-
-				if (points[i + 1] < -2) {
-					points[i + 1] = (Math.random() - 0.5) * 10;
-				}
-			}
-
-			rotation += delta;
-		}
-	});
-
+	$animationScripts.push({
+    start: 35,
+    end: 40,
+    do: () => {
+	    opacity = lerp(
+		    1, 0, scalePercent(scrollPercent, 35, 39)
+	    )
+    }
+  })
 
 	onMount(() => {
 		window.scrollTo({ top: 0, behavior: 'smooth' });
 		window.addEventListener('scroll', () => {
-			scrollPercent = calculateScrollPercent();
-		});
+      scrollPercent = calculateScrollPercent();
+    });
 
 		window.addEventListener('mousemove', (e) => {
 			mouseX = e.clientX;
@@ -81,8 +68,9 @@
 	});
 
 	useFrame((state, delta) => {
+		rotation += delta;
 		playScrollAnimations(
-			animationScripts,
+			$animationScripts,
 			scrollPercent,
 			delta
 		);

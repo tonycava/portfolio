@@ -1,10 +1,29 @@
 <script lang="ts">
+  import {T} from "@threlte/core";
 	import { useTexture } from '@threlte/extras';
-	import { T } from '@threlte/core';
+	import {
+		animationScripts
+	} from '@stores/animation.store';
+
 
 	export let textureSrc = '/star.png';
 	export let position: { x: number; y: number; z: number; } = { x: 0, y: 0, z: 0 };
 	export let points: Float32Array;
+
+	$animationScripts.push({
+		start: 0,
+		end: 101,
+		do: (delta: number) => {
+			for (let i = 0; i < points.length; i += 3) {
+				const [x, y, z] = [i, i + 1, i + 1];
+				points[y] -= delta * 0.1;
+
+				if (points[y] < -2) {
+					points[y] = (Math.random() - 0.5) * 10;
+				}
+			}
+		}
+	});
 
 	const map = useTexture(textureSrc);
 </script>

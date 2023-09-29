@@ -18,6 +18,7 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			'@styles': path.resolve('./src/styles'),
+			'@stores': path.resolve('./src/stores'),
 			'@models': path.resolve('./src/models'),
 			'@components': path.resolve('./src/components'),
 		}

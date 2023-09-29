@@ -4,9 +4,11 @@
 	import Loader from '../components/Loader.svelte';
 	import Header from '@components/Header.svelte';
 	import Main from '@components/Main.svelte';
-	import Footer from '@components/Footer.svelte';
+	import Presentation
+		from '@components/Presentation.svelte';
 
 	const { progress } = useProgress();
+	$: console.log($progress);
 	const tweenedProgress = tweened($progress, {
 		duration: 800
 	});
@@ -18,5 +20,11 @@
 {/if}
 
 <Header />
-<Main />
+<Main>
+  {#if $tweenedProgress === 1}
+    <Presentation />
+  {/if}
+</Main>
+
+
 <!--<Footer />-->
