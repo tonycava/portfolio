@@ -1,5 +1,5 @@
 export type AnimationScript = {
 	start: number;
 	end: number;
-	do: (delta: number) => void
+	do: (data: { delta: number, scrollPercent: number }) => void
 }

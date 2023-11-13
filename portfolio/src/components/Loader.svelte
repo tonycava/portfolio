@@ -8,7 +8,7 @@
   transition:fade|local={{
 			duration: 200
 		}}
-  class="z-50 absolute w-full h-full top-0 left-0 bg-secondary flex flex-col gap-1 items-center justify-center text-primary"
+  class="z-50 absolute w-screen h-screen top-0 left-0 bg-secondary flex flex-col gap-1 items-center justify-center text-primary"
 >
   <p class="text-sm z-30 text-primary">Loading</p>
   <div class="w-1/3 h-3 border-solid border-2 border-primary">
